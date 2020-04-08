@@ -22,7 +22,7 @@ Algorithm
   - convert word to uppercase
   - create an empty object
   - loop over every word character
-    - SUBPROCESS 1 - find the index of the block element that contains the character 
+    - find the index of the block element that contains the character 
     - if that index exists in the object 
       - return false
     - otherwise 
@@ -31,13 +31,13 @@ Algorithm
 Questions
 */
 
-const BLOCKS = ['BO', 'XK', 'DQ', 'CP', 'NA', 'GT', 'RE', 'FS', 'JW', 'HU', 'VI', 'LY', 'ZM'];
+const SPELLING_BLOCKS = ['BO', 'XK', 'DQ', 'CP', 'NA', 'GT', 'RE', 'FS', 'JW', 'HU', 'VI', 'LY', 'ZM'];
 function isBlockWord(word) {
   let blockIndeces = {};
   word = word.toUpperCase();
   
-  for (let char of word) {
-    let blockIndex = BLOCKS.findIndex(block => block.indexOf(char) >= 0);
+  for (let letter of word) {
+    let blockIndex = SPELLING_BLOCKS.findIndex(block => block.indexOf(letter) >= 0);
     if (blockIndeces[blockIndex]) {
       return false;
     } else {
