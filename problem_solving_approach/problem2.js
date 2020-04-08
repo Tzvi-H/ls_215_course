@@ -40,8 +40,8 @@ function luhnFormula(string) {
   let sum = string.replace(/\D/g, '')
                   .split('')
                   .reverse()
-                  .reduce((sum, char, index) => {
-                    let num = Number(char)
+                  .map(char => Number(char))
+                  .reduce((sum, num, index) => {
                     if (index % 2 === 1) {
                       num = num * 2;
                       if (num >= 10) num -= 9;
