@@ -40,11 +40,10 @@ function extractNumbers(stringNums) {
   numbers.forEach((value, index) => {
     let currentNum = results[results.length - 1];
     if (!/-|:|\.{2}/.test(value)) {
-      let digit = Number(value);
       if (!currentNum) {
-        results.push(digit);
+        results.push(Number(value));
       } else {
-        results.push(nextNumber(currentNum, digit));
+        results.push(nextNumber(currentNum, value));
       }
     } else {
       let nums = value.split(/[-:.]/).map(char => Number(char));
@@ -55,8 +54,8 @@ function extractNumbers(stringNums) {
   return results;
 }
 
-function nextNumber(currentNum, digit) {
-  while (currentNum % 10 !== digit) {
+function nextNumber(currentNum, value) {
+  while (!String(currentNum).endsWith(value)) {
     currentNum += 1;
   }
   return currentNum;
