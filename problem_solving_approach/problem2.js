@@ -37,16 +37,17 @@ function double(num) {
 }
 
 function luhnFormula(string) {
-  string = string.replace(/\D/g, '');
-  let needsDoubling = false;
-  let sum = 0
-
-  for (let index = string.length - 1; index >= 0; index -= 1) {
-    let num = Number(string[index]);
-    if (needsDoubling) num = double(num);
-    sum += num;
-    needsDoubling = !needsDoubling;
-  }
+  let sum = string.replace(/\D/g, '')
+                  .split('')
+                  .reverse()
+                  .reduce((sum, char, index) => {
+                    let num = Number(char)
+                    if (index % 2 === 1) {
+                      num = num * 2;
+                      if (num >= 10) num -= 9;
+                    }
+                    return sum + num;
+                  }, 0);
 
   return sum % 10 === 0;
 }
