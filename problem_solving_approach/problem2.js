@@ -18,7 +18,7 @@ Data Structure
   - string
 Algorithm
   - initialize a needsDoubling variable to false
-  - initialize a sum variable to an empty string
+  - initialize a sum to 0
   - replace all non digit characters with blanks  
   - loop from back of string, for each index
     - intialize a num variable to the current element coerced into a number
@@ -26,9 +26,8 @@ Algorithm
       - double the number
         - if doubling results in greater then 9
           - subtract 9
-    - add the num to the front of sum string
-  - add all the digits in the sum string
-  - return whether the last digit is 0       
+    - add the num to the sum
+  - return whether the last digit in sum is 0       
 Questions
 */
 
@@ -37,25 +36,19 @@ function double(num) {
   return num >= 10 ? num - 9 : num;
 }
 
-function sumString(string) {
-  return string.split('')
-               .reduce((sum, char) => Number(char) + sum, 0);
-}
-
-function luhnFormula(numberString) {
+function luhnFormula(string) {
+  string = string.replace(/\D/g, '');
   let needsDoubling = false;
-  let cleanNumberString = numberString.replace(/\D/g, '');
-  let doubledNumberString = '';
+  let sum = 0
 
-  for (let index = cleanNumberString.length - 1; index >= 0; index -= 1) {
-    let num = Number(cleanNumberString[index]);
+  for (let index = string.length - 1; index >= 0; index -= 1) {
+    let num = Number(string[index]);
     if (needsDoubling) num = double(num);
-    doubledNumberString = num + doubledNumberString;
+    sum += num;
     needsDoubling = !needsDoubling;
   }
 
-  let finalSum = sumString(doubledNumberString);
-  return finalSum % 10 === 0;
+  return sum % 10 === 0;
 }
 
 console.log(luhnFormula('1111')); // invalid
