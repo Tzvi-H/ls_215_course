@@ -31,9 +31,6 @@ function splitIntoRange(string) {
 
 function incrementNumStringByOne(numString) {
   let nextNum = Number(numString) + 1;
-  if (nextNum === 100) {
-    nextNum = 0;
-  }
   return String(nextNum);
 }
 
@@ -45,12 +42,13 @@ function convertShortHandNums(stringOfNums) {
       let range = splitIntoRange(numString);
       for (let index = 0; index < range.length - 1; index += 1) {
         let start = range[index];
-        let end = range[index + 1];
         if (isEmpty(results)) {
           results.push(Number(start));
           start = incrementNumStringByOne(start);
-        }
+        } 
         let lastNum = lastElement(results);
+        start = nextValue(lastNum, start);
+        let end = nextValue(Number(start), range[index + 1]);
         if (endsWith(lastNum, start)) {
           start = incrementNumStringByOne(start);
         }
@@ -77,18 +75,9 @@ function convertShortHandNums(stringOfNums) {
   return results;
 }
 
-// console.log(convertShortHandNums('1, 3, 7, 2, 4, 1'));
-// console.log(convertShortHandNums('1-3, 1-2'));
-// console.log(convertShortHandNums('104-2'));
-// console.log(convertShortHandNums('104-02'));
-// console.log(convertShortHandNums('545, 64:11'));
-console.log(convertShortHandNums('1:5:2'));
-
-
-
-// "1, 3, 7, 2, 4, 1" --> 1, 3, 7, 12, 14, 21
-// "1-3, 1-2" --> 1, 2, 3, 11, 12
-// "104-2" --> 104, 105, ... 112
-// "104-02" --> 104, 105, ... 202
-// "545, 64:11" --> 545, 564, 565, .. 611
-// "1:5:2" --> 1, 2, 3, 4, 5, 6, ... 12
+console.log(convertShortHandNums('1, 3, 7, 2, 4, 1')); // --> 1, 3, 7, 12, 14, 21
+console.log(convertShortHandNums('1-3, 1-2'));      // --> 1, 2, 3, 11, 12
+console.log(convertShortHandNums('104-2'));         // --> 104, 105, ... 112
+console.log(convertShortHandNums('104-02'));        // --> 104, 105, ... 202
+console.log(convertShortHandNums('545, 64:11'));    // --> 545, 564, 565, .. 611
+console.log(convertShortHandNums('1:5:2'));         // --> 1, 2, 3, 4, 5, 6, ... 12
