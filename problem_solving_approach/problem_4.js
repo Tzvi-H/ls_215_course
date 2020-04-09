@@ -47,8 +47,23 @@ function extractNumbers(stringNums) {
       }
     } else {
       let nums = value.split(/[-:.]/).map(char => Number(char));
-      //let range = 
-
+      if (nums.length === 2) {
+        while (true) {
+          let value = nums[0];
+          if (!currentNum) {
+            results.push(value);
+            value += 1;
+          }
+          do {
+            results.push(nextNumber(currentNum, String(value)));
+            currentNum = results[results.length - 1];
+            value = String(Number(value) + 1);
+            break;
+          } while (!String(currentNum).endsWith(value));
+        }
+      } else {
+        return kkjl;
+      }
     }  
   })
   return results;
@@ -62,7 +77,7 @@ function nextNumber(currentNum, value) {
 }
 
 console.log(extractNumbers("1, 3, 7, 2, 4, 1"));  // [1, 3, 7, 12, 14, 21]
-// console.log(extractNumbers("1-3, 1-2")); // [1, 2, 3, 11, 12]
+console.log(extractNumbers("1-3, 1-2")); // [1, 2, 3, 11, 12]
 // console.log(extractNumbers("1:5:2")); // [1, 2, 3, 4, 5, 6, ... 12]
 // console.log(extractNumbers("104-2")); // [104, 105, ... 112]
 // console.log(extractNumbers("104-02")); // [104, 105, ... 202]
