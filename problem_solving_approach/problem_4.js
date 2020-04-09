@@ -3,11 +3,7 @@ function splitIntoNums(string) {
 }
 
 function includesRange(numString) {
-  return /-|:|\.{2}/.test(numString);
-}
-
-function isEmpty(array) {
-  return array.length === 0;
+  return /[:\-]|\.{2}/.test(numString);
 }
 
 function lastElement(array) {
@@ -26,7 +22,7 @@ function endsWith(num, endingString) {
 }
 
 function splitIntoRange(string) {
-  return string.split(/-|:|\.{2}/);
+  return string.split(/[:\-]|\.{2}/);
 }
 
 function incrementNumStringByOne(numString) {
