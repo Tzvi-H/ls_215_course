@@ -63,13 +63,9 @@ function convertShortHandNums(stringOfNums) {
         }
       }
     } else {
-      if (isEmpty(results)) {
-        results.push(Number(numString));
-      } else {
-        let lastNum = lastElement(results);
-        let num = nextValue(lastNum, numString);
-        results.push(num);
-      }
+      let lastNum = lastElement(results) || Number(numString);
+      let num = nextValue(lastNum, numString);
+      results.push(num);
     }
   })
   return results;
