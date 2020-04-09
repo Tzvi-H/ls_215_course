@@ -41,17 +41,9 @@ function convertShortHandNums(stringOfNums) {
     if (includesRange(numString)) {
       let range = splitIntoRange(numString);
       for (let index = 0; index < range.length - 1; index += 1) {
-        let start = range[index];
-        if (isEmpty(results)) {
-          results.push(Number(start));
-          start = incrementNumStringByOne(start);
-        } 
-        let lastNum = lastElement(results);
-        start = nextValue(lastNum, start);
-        let end = nextValue(Number(start), range[index + 1]);
-        if (endsWith(lastNum, start)) {
-          start = incrementNumStringByOne(start);
-        }
+        let lastNum = lastElement(results) || Number(range[index]);
+        let start = nextValue(lastNum, range[index]);
+        let end = nextValue(Number(start), range[index + 1]);        
         while (true) {
           let num = nextValue(lastNum, start);
           results.push(num);
