@@ -1,85 +1,94 @@
-/*
-  - 
-Problem
-  - Given a string of digits where the digits only represent the significant part of the numbers,
-  - return an array of the full numbers. 
-  - numbers always increase in order
-  - '1,5,1,5,1' => (1,5,11,15,21)
-  - numbers can be written with ranges (-, :, ..)
-  - '1:3' => (1,2,3)
-Input/Output
-  - string / array
-Examples
-Data Structure
-Algorithm
-Questions
-*/
+function splitIntoNums(string) {
+  return string.split(', ');
+}
 
-/*
-0. create a result array
-1. split all numberStrings
-2. map into array of numbers
-3. for each number and index
-  3a. if index is 0
-    3aa. push the number to the results         
-  3b. else 
-    3ba. get the last number in the results
-    3bb. generate the next largerNum with ending digit of number (SUBPROCESS)
-    3bc. push the generatedNumber into the results array
-4. return results
+function includesRange(numString) {
+  return /-|:|\.{2}/.test(numString);
+}
 
-SUBPROCESS
-0. Given a currentNum and a digit
-1. increment currentNum until it's last digit matches the digit 
-2. return currentNum  
-*/
+function isEmpty(array) {
+  return array.length === 0;
+}
 
-function extractNumbers(stringNums) {
+function lastElement(array) {
+  return array[array.length - 1];
+}
+
+function nextValue(num, endingString) {
+  while (!endsWith(num, endingString)) {
+    num += 1;
+  }
+  return num;
+}
+
+function endsWith(num, endingString) {
+  return String(num).endsWith(endingString);
+}
+
+function splitIntoRange(string) {
+  return string.split(/-|:|\.{2}/);
+}
+
+function incrementNumStringByOne(numString) {
+  let nextNum = Number(numString) + 1;
+  if (nextNum === 100) {
+    nextNum = 0;
+  }
+  return String(nextNum);
+}
+
+function convertShortHandNums(stringOfNums) {
   let results = [];
-  let numbers = stringNums.split(', ');
-  numbers.forEach((value, index) => {
-    let currentNum = results[results.length - 1];
-    if (!/-|:|\.{2}/.test(value)) {
-      if (!currentNum) {
-        results.push(Number(value));
-      } else {
-        results.push(nextNumber(currentNum, value));
+  let stringNums = splitIntoNums(stringOfNums);
+  stringNums.forEach(numString => {
+    if (includesRange(numString)) {
+      let range = splitIntoRange(numString);
+      for (let index = 0; index < range.length - 1; index += 1) {
+        let start = range[index];
+        let end = range[index + 1];
+        if (isEmpty(results)) {
+          results.push(Number(start));
+          start = incrementNumStringByOne(start);
+        }
+        let lastNum = lastElement(results);
+        if (endsWith(lastNum, start)) {
+          start = incrementNumStringByOne(start);
+        }
+        while (true) {
+          let num = nextValue(lastNum, start);
+          results.push(num);
+          lastNum = lastElement(results);
+          if (endsWith(lastNum, end)) {
+            break;
+          }
+          start = incrementNumStringByOne(start);
+        }
       }
     } else {
-      let nums = value.split(/[-:.]/).map(char => Number(char));
-      if (nums.length === 2) {
-        while (true) {
-          let value = nums[0];
-          if (!currentNum) {
-            results.push(value);
-            value += 1;
-          }
-          do {
-            results.push(nextNumber(currentNum, String(value)));
-            currentNum = results[results.length - 1];
-            value = String(Number(value) + 1);
-            break;
-          } while (!String(currentNum).endsWith(value));
-        }
+      if (isEmpty(results)) {
+        results.push(Number(numString));
       } else {
-        return kkjl;
+        let lastNum = lastElement(results);
+        let num = nextValue(lastNum, numString);
+        results.push(num);
       }
-    }  
+    }
   })
   return results;
 }
 
-function nextNumber(currentNum, value) {
-  while (!String(currentNum).endsWith(value)) {
-    currentNum += 1;
-  }
-  return currentNum;
-}
+// console.log(convertShortHandNums('1, 3, 7, 2, 4, 1'));
+// console.log(convertShortHandNums('1-3, 1-2'));
+// console.log(convertShortHandNums('104-2'));
+// console.log(convertShortHandNums('104-02'));
+// console.log(convertShortHandNums('545, 64:11'));
+console.log(convertShortHandNums('1:5:2'));
 
-console.log(extractNumbers("1, 3, 7, 2, 4, 1"));  // [1, 3, 7, 12, 14, 21]
-console.log(extractNumbers("1-3, 1-2")); // [1, 2, 3, 11, 12]
-// console.log(extractNumbers("1:5:2")); // [1, 2, 3, 4, 5, 6, ... 12]
-// console.log(extractNumbers("104-2")); // [104, 105, ... 112]
-// console.log(extractNumbers("104-02")); // [104, 105, ... 202]
-// console.log(extractNumbers("545, 64:11")); // [545, 564, 565, .. 611]
 
+
+// "1, 3, 7, 2, 4, 1" --> 1, 3, 7, 12, 14, 21
+// "1-3, 1-2" --> 1, 2, 3, 11, 12
+// "104-2" --> 104, 105, ... 112
+// "104-02" --> 104, 105, ... 202
+// "545, 64:11" --> 545, 564, 565, .. 611
+// "1:5:2" --> 1, 2, 3, 4, 5, 6, ... 12
